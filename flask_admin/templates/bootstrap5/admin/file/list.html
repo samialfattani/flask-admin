@@ -110,6 +110,8 @@
                         {{ delete_form.path(value=path) }}
                         {% if delete_form.csrf_token is defined and delete_form.csrf_token %}
                           {{ delete_form.csrf_token }}
+                        {% elif csrf_token is defined and csrf_token %}
+                          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
                         {% endif %}
                         <button class="btn py-0 text-danger confirm-first"
                         data-msg="{{ confirmation_msg  }}" >
@@ -123,6 +125,8 @@
                         {{ delete_form.path(value=path) }}
                         {% if delete_form.csrf_token is defined and delete_form.csrf_token %}
                           {{ delete_form.csrf_token }}
+                        {% elif csrf_token is defined and csrf_token %}
+                          <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
                         {% endif %}
                         <button class="btn py-0 text-danger confirm-first"
                           data-msg="{{ confirmation_msg  }}" >

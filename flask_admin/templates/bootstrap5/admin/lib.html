@@ -271,7 +271,8 @@
     </div><!-- .mb-3 {{ kwargs.get('column_class', '') }} -->
 
   {%- else -%}
-    {%- set _ = kwargs.setdefault('class', 'form-control') -%}
+    {%- set is_select = field.__class__.__name__ in ['Select', 'Select2Field', 'SelectField'] -%}
+    {%- set _ = kwargs.setdefault('class', 'form-select' if is_select else 'form-control') -%}
     {%- if direct_error -%}
       {%- set _ = kwargs.update({'class': kwargs['class'] ~ ' is-invalid'}) -%}
     {%- endif -%}

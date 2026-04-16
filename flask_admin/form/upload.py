@@ -61,7 +61,7 @@ class FileUploadInput:
             ),
         },
         "bootstrap5": {
-            "empty_template": '<input class="form-control" %(file)s>',
+            "empty_template": "<input %(file)s>",
             "data_template": (
                 '<div class="d-flex align-items-center gap-1">'
                 '  <input class="form-control" %(text)s>'
@@ -147,7 +147,7 @@ class ImageUploadInput:
             ),
         },
         "bootstrap5": {
-            "empty_template": '<input class="form-control" %(file)s>',
+            "empty_template": "<input %(file)s>",
             "data_template": (
                 '<div class="image-thumbnail d-flex align-items-center gap-1">'
                 '  <img class="img-thumbnail" %(image)s>'

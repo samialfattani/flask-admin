@@ -137,7 +137,7 @@
                                           title="{{ _gettext('Sort by %(name)s', name=name) | lower }}" >
                                         {%- if admin_view.is_sortable(c) and sort_column == column -%}
                                           <span class="sort-indicator">
-                                              <i class="fas fa-sort-{% if sort_desc %}up{% else %}down{% endif %} text-primary"></i>
+                                              <i class="fas fa-sort-{% if sort_desc %}down{% else %}up{% endif %} text-primary"></i>
                                           </span>
                                         {%- else -%}
                                           <i class="fas fa-sort text-muted opacity-50"></i>

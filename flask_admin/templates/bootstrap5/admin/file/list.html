@@ -49,7 +49,7 @@
                           <a class="text-decoration-none" href="{{ sort_url(column, dir_path, True) }}"
                             data-bs-toggle="tooltip" data-bs-placement="top"
                             title="{{ _gettext('Sort by %(name)s', name=column) }}">
-                            <i class="fas fa-sort-{% if sort_desc %}up{% else %}down{% endif %} text-primary"></i>
+                            <i class="fas fa-sort-{% if sort_desc %}down{% else %}up{% endif %} text-primary"></i>
                           </a>
                         </div>
                       {% else %}

@@ -151,11 +151,13 @@ class AdminFilters {
             } else if (filter.type === "daterangepicker") {
                 this.createDateRange(field, 'date');
             } else if (filter.type === "datetimepicker") {
-                field.type = 'datetime-local';
+                field.type = 'datetime';
+                this.createDate(field, 'datetime-local');
             } else if (filter.type === "datetimerangepicker") {
                 this.createDateRange(field, 'datetime-local');
             } else if (filter.type === "timepicker") {
                 field.type = 'time';
+                this.createDate(field, 'time');
             } else if (filter.type === "timerangepicker") {
                 this.createDateRange(field, 'time');
             }
@@ -172,9 +174,30 @@ class AdminFilters {
         
         return field;
     }
-    
+
+    createDate(originalField, inputType) {
+        const inputGroup = originalField.parentElement;
+        const newField = document.createElement('input');
+
+        newField.type = inputType;
+        newField.id = originalField.name + '_dt';
+        newField.className = 'form-control form-control-sm filter-val';        
+
+        originalField.dataset.rangeType = inputType;
+        originalField.classList.add('d-none');
+        newField.addEventListener('change', () => {
+            const submitButton = this.root.querySelector('button[type="submit"]');
+            submitButton?.classList.remove('d-none');
+            originalField.value = this.formatDateTime(newField.value, inputType);
+        });
+        inputGroup.insertBefore(newField, inputGroup.lastElementChild);
+
+        return originalField;
+    }
+
     createDateRange(originalField, inputType) {
         const inputGroup = originalField.parentElement;
+        originalField.dataset.rangeType = inputType;
         
         const startField = document.createElement('input');
         startField.type = inputType;
@@ -205,12 +228,38 @@ class AdminFilters {
             field.addEventListener('change', () => {
                 const submitButton = this.root.querySelector('button[type="submit"]');
                 submitButton?.classList.remove('d-none');
-                originalField.value = startField.value + ' to ' + endField.value;
+                const start = this.formatDateTime(startField.value, inputType);
+                const end = this.formatDateTime(endField.value, inputType);
+                originalField.value = start + ' to ' + end;
             });
         });
         
         return startField;
     }
+
+    formatDateTime(value, inputType) {
+        if (!value) {
+            return value;
+        }
+
+        if (inputType === 'time') {
+            return /^\d{2}:\d{2}$/.test(value) ? `${value}:00` : value;
+        }
+
+        const parts = value.split('T');
+        if (parts.length !== 2) {
+            return value;
+        }
+
+        const [datePart, timePart] = parts;
+        if (!datePart || !timePart) {
+            return value;
+        }
+
+        const normalizedTime = /^\d{2}:\d{2}$/.test(timePart) ? `${timePart}:00` : timePart;
+        return `${datePart} ${normalizedTime}`;
+    }
+
     
     addFilter(name, subfilters, selectedIndex, filterValue) {
         const template = document.getElementById('filter-item-template');
@@ -301,7 +350,8 @@ class AdminFilters {
 }
 
 // Initialize when the DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() 
+{
     document.addEventListener('adminFormReady', function() {
         const filterGroupsData = document.getElementById('filter-groups-data');
         const activeFiltersData = document.getElementById('active-filters-data');
@@ -314,8 +364,6 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch (error) {
                 console.error('Error initializing admin filters:', error);
             }
-
-            
         }
     });
     

@@ -69,6 +69,7 @@ class User(db.Model):
     email = db.Column(db.Unicode(64))
     active = db.Column(db.Boolean, default=True)
     dob = db.Column(db.Date)
+    daily_reminder = db.Column(db.Time)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
     social = db.Column(db.Enum(Social), default=Social.Single)
 
@@ -119,6 +120,7 @@ class UserAdmin(CustomView):
         "email",
         "organization",
         "dob",
+        "daily_reminder",
         "social",
         "active",
         "created_at",
@@ -131,6 +133,7 @@ class UserAdmin(CustomView):
         "email",
         "active",
         "dob",
+        "daily_reminder",
         "social",
         "organization",
         "created_at",
@@ -140,6 +143,7 @@ class UserAdmin(CustomView):
         "email",
         "active",
         "dob",
+        "daily_reminder",
         "social",
         "organization_id",
         "created_at",

@@ -128,18 +128,20 @@ def build_sample_db(db, User, Page, Organization, Social):
             datetime.date(
                 random.randint(1980, 2010), random.randint(1, 12), random.randint(1, 28)
             )
-            if random.choice([True, False])
+            if random.choices([True, False], weights=[0.8, 0.2])[0]
             else None
         )  # Randomly assign
         user.social = (
-            random.choice(list(Social)) if random.choice([True, False]) else None
+            random.choice(list(Social))
+            if random.choices([True, False], weights=[0.8, 0.2])[0]
+            else None
         )  # Randomly assign
 
         # Pick a random organization from the list created above
         user.organization = random.choice(organizations)
         user.daily_reminder = (
             datetime.time(random.randint(0, 23), random.randint(10, 20))
-            if random.choice([True, False])
+            if random.choices([True, False], weights=[0.8, 0.2])[0]
             else None
         )  # Randomly assign
 

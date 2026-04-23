@@ -17,9 +17,10 @@
             const opts = {
                 width: '100%',
                 theme: 'bootstrap-5',
+                selectionCssClass: ':all: d-flex',
                 placeholder: $el.data('placeholder'),
                 allowClear: $el.data('allow-blank') || false,
-                minimumInputLength: $el.data('minimum-input-length') || 0,
+                minimumInputLength: $el.data('minimum-input-length') || 2,
             };
 
             // detect if the select2 is inside a modal
@@ -28,9 +29,15 @@
                 opts.dropdownParent = modal;
             }
 
+            //debugger;
             if ($el.data('tags')) {
                 opts.tags = true;
                 opts.tokenSeparators = [','];
+            }
+
+            if ($el.data('multiple')) {
+                // opts.selectionCssClass += ' form-select';
+                opts.multiple = true;
             }
 
             $el.select2(opts);
@@ -82,12 +89,15 @@
          * @param {String} name - The data-role name.
          */
         applyStyle($el, name) {
+            //debugger;
             switch (name) {
                 case 'select2':
                     this._initSelect2($el);
                     break;
                 case 'select2-tags':
-                    this._initSelect2($el.data('tags', true));
+                    $el = $el.data('tags', true);
+                    $el = $el.data('multiple', true);
+                    this._initSelect2($el);
                     break;
                 case 'select2-ajax':
                     this._initSelect2Ajax($el);

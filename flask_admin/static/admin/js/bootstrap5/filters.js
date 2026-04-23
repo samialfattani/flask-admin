@@ -72,35 +72,14 @@ class AdminFilters {
         submitButton?.classList.remove('d-none');
     }
     
-    createFilterInput(inputContainer, filterValue, filter) {
+    createFilterInput(inputContainer, filterValue, filter) 
+    {
         let field;
-        
-        if (filter.type === "select2-tags") {
-            field = document.createElement('input');
-            field.type = 'hidden';
-            field.className = 'filter-val form-control';
-            field.name = this.makeName(filter.arg);
-            field.value = filterValue || '';
-        } else if (filter.options) {
+        debugger;
+
+        if (filter.options || filter.type == "select2-tags") {
             field = document.createElement('select');
-            field.className = 'filter-val form-select form-select-sm';
-            field.name = this.makeName(filter.arg);
-            
-            const emptyOption = document.createElement('option');
-            emptyOption.value = '';
-            emptyOption.textContent = '-- Select --';
-            field.appendChild(emptyOption);
-            
-            filter.options.forEach(option => {
-                const optionElement = document.createElement('option');
-                optionElement.value = option[0];
-                optionElement.textContent = option[1];
-                if (filterValue && filterValue === option[0]) {
-                    optionElement.selected = true;
-                }
-                field.appendChild(optionElement);
-            });
-        } else {
+        }else {
             field = document.createElement('input');
             field.type = 'text';
             field.className = 'filter-val form-control form-control-sm';
@@ -123,12 +102,63 @@ class AdminFilters {
                 field.value = '';
                 field.dispatchEvent(new Event('change', { bubbles: true }));
             });
-            inputGroup.appendChild(clearButton);
-
+            if (filter.type != "select2-tags"){
+              inputGroup.appendChild(clearButton);
+            }
+              
             inputContainer.appendChild(inputGroup);
-        } else {
-            inputContainer.appendChild(field);
         }
+        
+        if (filter.options || filter.type == "select2-tags") {
+            field = document.createElement('select');
+            field.className = 'filter-val form-select form-select-sm';
+            field.name = this.makeName(filter.arg);
+            
+            if(filter.type != "select2-tags") {
+                const emptyOption = document.createElement('option');
+                emptyOption.value = '';
+                emptyOption.textContent = `-- Select --`;
+                emptyOption.disabled = true;
+                field.appendChild(emptyOption);
+            }
+            
+            filter.options?.forEach(option => {
+                const optionElement = document.createElement('option');
+                optionElement.value = option[0];
+                optionElement.textContent = option[1];
+                if (filterValue && filterValue === option[0]) {
+                    optionElement.selected = true;
+                }
+                field.appendChild(optionElement);
+            });
+            inputContainer.appendChild(field);
+        } else {
+        }
+        //inputContainer.appendChild(field);
+
+
+        // else {
+        //     inputContainer.appendChild(field);
+        // }
+
+        // if (field.type === 'text' && filter.type == "select2-tags") {
+        //     field = document.createElement('select');
+        //     //field.type = 'hidden';
+        //     field.className = 'filter-val form-control';
+        //     field.name = this.makeName(filter.arg);
+        //     field.value = filterValue || '';
+        //     inputContainer.appendChild(field);
+        // }
+        
+        // if (field.type !== 'text' && filter.type == "select2-tags") {
+        //     field = document.createElement('select');
+        //     //field.type = 'hidden';
+        //     field.className = 'filter-val form-control';
+        //     field.name = this.makeName(filter.arg);
+        //     field.value = filterValue || '';
+        //     inputContainer.appendChild(field);
+        // }
+
         
         // Show the "Apply" button when the filter input changes
         field.addEventListener('input', () => {
@@ -144,7 +174,9 @@ class AdminFilters {
         return field;
     }
     
-    styleFilterInput(filter, field) {
+    styleFilterInput(filter, field) 
+    {
+        //debugger;
         if (filter.type) {
             if (filter.type === "datepicker") {
                 field.type = 'date';
@@ -160,16 +192,15 @@ class AdminFilters {
                 this.createDate(field, 'time');
             } else if (filter.type === "timerangepicker") {
                 this.createDateRange(field, 'time');
-            }
-            
-            if (window.faForm && window.faForm.applyStyle) {
-                window.faForm.applyStyle($(field), filter.type);
-            }
+            } else if (filter.type === "select2-tags") {
+
+            }            
         } else if (filter.options) {
             filter.type = "select2";
-            if (window.faForm && window.faForm.applyStyle) {
-                window.faForm.applyStyle($(field), filter.type);
-            }
+        }
+
+        if (window.faForm && window.faForm.applyStyle) {
+            window.faForm.applyStyle($(field), filter.type);
         }
         
         return field;

@@ -79,16 +79,19 @@ class AdminFilters {
 
         if (filter.options || filter.type == "select2-tags") {
             field = document.createElement('select');
+            inputContainer.appendChild(field);
         }else {
             field = document.createElement('input');
             field.type = 'text';
-            field.className = 'filter-val form-control form-control-sm';
-            field.name = this.makeName(filter.arg);
-            field.value = filterValue || '';
-            field.placeholder = 'Enter value...';
         }
         
-        if (field.type === 'text') {
+        field.className = 'filter-val form-control form-control-sm';
+        field.name = this.makeName(filter.arg);
+        field.id = 'xx1';
+        field.value = filterValue || '';
+        field.placeholder = 'Enter value...';
+
+        if (field.type === 'text' ) {
             const inputGroup = document.createElement('div');
             inputGroup.className = 'input-group input-group-sm';
             inputGroup.appendChild(field);
@@ -105,12 +108,13 @@ class AdminFilters {
             if (filter.type != "select2-tags"){
               inputGroup.appendChild(clearButton);
             }
-              
+            
+            field.value = filterValue || '';
             inputContainer.appendChild(inputGroup);
         }
         
-        if (filter.options || filter.type == "select2-tags") {
-            field = document.createElement('select');
+        if (filter.options ) {
+            //field = document.createElement('select');
             field.className = 'filter-val form-select form-select-sm';
             field.name = this.makeName(filter.arg);
             

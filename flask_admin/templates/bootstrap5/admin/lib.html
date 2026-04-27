@@ -367,6 +367,17 @@
 {% macro render_form(form, cancel_url, extra=None, form_opts=None, action=None, is_modal=False) -%}
   {% call form_tag(action=action) %}
       {{ render_form_fields(form, form_opts=form_opts) }}
+
+      {%- if form.form_errors -%}
+        <div class="invalid-feedback d-block">
+            <ul class="list-styled mb-0">
+              {%- for e in form.form_errors -%}
+                <li>{{ e }}</li>
+              {%- endfor -%}
+            </ul>
+        </div>
+      {%- endif -%}
+
       {{ render_form_buttons(cancel_url, extra, is_modal) }}
   {% endcall %}
 {% endmacro %}

@@ -20,7 +20,7 @@
                 selectionCssClass: ':all: d-flex',
                 placeholder: $el.data('placeholder'),
                 allowClear: $el.data('allow-blank') || false,
-                minimumInputLength: $el.data('minimum-input-length') || 2,
+                minimumInputLength: $el.data('minimum-input-length') || 0,
             };
 
             // detect if the select2 is inside a modal
@@ -29,7 +29,6 @@
                 opts.dropdownParent = modal;
             }
 
-            //debugger;
             if ($el.data('tags')) {
                 opts.tags = true;
                 opts.tokenSeparators = [','];

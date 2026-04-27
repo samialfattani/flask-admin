@@ -75,7 +75,6 @@ class AdminFilters {
     createFilterInput(inputContainer, filterValue, filter) 
     {
         let field;
-        debugger;
 
         if (filter.options || filter.type == "select2-tags") {
             field = document.createElement('select');
@@ -87,7 +86,6 @@ class AdminFilters {
         
         field.className = 'filter-val form-control form-control-sm';
         field.name = this.makeName(filter.arg);
-        field.id = 'xx1';
         field.value = filterValue || '';
         field.placeholder = 'Enter value...';
 
@@ -118,15 +116,15 @@ class AdminFilters {
             field.className = 'filter-val form-select form-select-sm';
             field.name = this.makeName(filter.arg);
             
-            if(filter.type != "select2-tags") {
-                const emptyOption = document.createElement('option');
-                emptyOption.value = '';
-                emptyOption.textContent = `-- Select --`;
-                emptyOption.disabled = true;
-                field.appendChild(emptyOption);
-            }
+            // if(filter.type != "select2-tags") {
+            //     const emptyOption = document.createElement('option');
+            //     emptyOption.value = '';
+            //     emptyOption.textContent = `-- Select --`;
+            //     emptyOption.disabled = true;
+            //     field.appendChild(emptyOption);
+            // }
             
-            filter.options?.forEach(option => {
+            for (const option of filter.options) {
                 const optionElement = document.createElement('option');
                 optionElement.value = option[0];
                 optionElement.textContent = option[1];
@@ -134,17 +132,12 @@ class AdminFilters {
                     optionElement.selected = true;
                 }
                 field.appendChild(optionElement);
-            });
+                console.log('Added option:', option[0], option[1]);
+            };
+
             inputContainer.appendChild(field);
-        } else {
         }
-        //inputContainer.appendChild(field);
-
-
-        // else {
-        //     inputContainer.appendChild(field);
-        // }
-
+        
         // if (field.type === 'text' && filter.type == "select2-tags") {
         //     field = document.createElement('select');
         //     //field.type = 'hidden';
@@ -154,10 +147,9 @@ class AdminFilters {
         //     inputContainer.appendChild(field);
         // }
         
-        // if (field.type !== 'text' && filter.type == "select2-tags") {
-        //     field = document.createElement('select');
-        //     //field.type = 'hidden';
-        //     field.className = 'filter-val form-control';
+        // if (filter.type == "select2-tags") {
+        //     field = document.createElement('input');
+        //     field.type = 'hidden';
         //     field.name = this.makeName(filter.arg);
         //     field.value = filterValue || '';
         //     inputContainer.appendChild(field);
@@ -197,7 +189,7 @@ class AdminFilters {
             } else if (filter.type === "timerangepicker") {
                 this.createDateRange(field, 'time');
             } else if (filter.type === "select2-tags") {
-
+                this.createHiddenField(field);
             }            
         } else if (filter.options) {
             filter.type = "select2";
@@ -208,6 +200,19 @@ class AdminFilters {
         }
         
         return field;
+    }
+
+    createHiddenField(field) {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = field.name;
+      hiddenField.value = field.value || '';
+      field.name = field.name + '_display';
+      field.parentElement.appendChild(hiddenField);
+      //field.classList.add('d-none');
+      field.onchange = function() {
+          hiddenField.value = field.value;
+      };
     }
 
     createDate(originalField, inputType) {
@@ -307,7 +312,7 @@ class AdminFilters {
         const removeButton = filterItem.querySelector('.remove-filter');
         removeButton.addEventListener('click', (e) => this.removeFilter(e));
         
-        const select = filterItem.querySelector('.filter-op');
+        const selectOp = filterItem.querySelector('.filter-op');
         let filterSelection = 0;
         
         subfilters.forEach((subfilter, index) => {
@@ -319,20 +324,20 @@ class AdminFilters {
                 option.selected = true;
                 filterSelection = index;
             }
-            select.appendChild(option);
+            selectOp.appendChild(option);
         });
         
         if (window.jQuery && window.jQuery.fn.select2) {
-            window.jQuery(select).select2({
+            window.jQuery(selectOp).select2({
                 width: 'resolve',
                 theme: 'bootstrap-5',
                 minimumResultsForSearch: Infinity
             }).on("change", () => {
-                this.changeOperation(subfilters, filterItem, select);
+                this.changeOperation(subfilters, filterItem, selectOp);
             });
         } else {
-            select.addEventListener('change', () => {
-                this.changeOperation(subfilters, filterItem, select);
+            selectOp.addEventListener('change', () => {
+                this.changeOperation(subfilters, filterItem, selectOp);
             });
         }
         
@@ -400,6 +405,7 @@ document.addEventListener('DOMContentLoaded', function()
                 console.error('Error initializing admin filters:', error);
             }
         }
+   
     });
     
     const formReadyEvent = new CustomEvent('adminFormReady');

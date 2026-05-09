@@ -321,11 +321,7 @@
     {% endfor %}
   {% else %}
     {% for f in form if f.widget.input_type is undefined or f.widget.input_type != 'hidden' %}
-      {% if form_opts %}
-        {% set kwargs = form_opts.widget_args.get(f.short_name, {}) %}
-      {% else %}
-        {% set kwargs = {} %}
-      {% endif %}
+      {% set kwargs = form_opts.widget_args.get(f.short_name, {})  if form_opts else {} %}
       {{ render_field(form, f, kwargs) }}
     {% endfor %}
   {% endif %}
@@ -387,6 +383,9 @@
         href="{{ admin_static.url(filename='vendor/select2-bootstrap5/select2.min.css', v='4.1.0') }}">
     <link rel="stylesheet" {{ admin_csp_nonce_attribute }}
         href="{{ admin_static.url(filename='vendor/select2-bootstrap5/select2-bootstrap-5-theme.min.css', v='4.1.0') }}">
+    <link rel="stylesheet" {{ admin_csp_nonce_attribute }}
+        href="{{ admin_static.url(filename='bootstrap/bootstrap5/daterangepicker/daterangepicker.css', v='3.1') }}">
+
   {%- if config.get('FLASK_ADMIN_MAPS') -%}
     <link rel="stylesheet" {{ admin_csp_nonce_attribute }}
         href="{{ admin_static.url(filename='vendor/leaflet/leaflet.css', v='1.9.4') }}">
@@ -420,10 +419,16 @@
         src="https://maps.googleapis.com/maps/api/js?v=3&libraries=places&key={{ config.get('FLASK_ADMIN_GOOGLE_MAPS_API_KEY') }}"></script>
     {% endif %}
   {% endif %}
+
+    <script {{ admin_csp_nonce_attribute }}
+      src="{{ admin_static.url(filename='bootstrap/bootstrap5/daterangepicker/daterangepicker.js', v='3.1') }}"></script>
+
     <script {{ admin_csp_nonce_attribute }}
         src="{{ admin_static.url(filename='vendor/select2-bootstrap5/select2.full.min.js', v='4.1.0') }}"></script>
     <script {{ admin_csp_nonce_attribute }}
         src="{{ admin_static.url(filename='admin/js/bootstrap5/form.js', v='1.0.2') }}"></script>
+
+
 {% endmacro %}
 
 {% macro extra() %}

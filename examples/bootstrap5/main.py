@@ -160,6 +160,7 @@ class UserAdmin(CustomView):
         "active",
         "dob",
         "daily_reminder",
+        "daily_reminder",
         "social",
         "organization_id",
         "created_at",
@@ -177,9 +178,6 @@ class UserAdmin(CustomView):
     }
 
     can_view_details = True
-    details_modal = True
-    create_modal = True
-    edit_modal = True
     can_set_page_size = True
     page_size = 3
     page_size_options = (3, 10, 20, 50, 100)
@@ -197,6 +195,12 @@ class UserAdmin(CustomView):
 
     def edit_form(self, obj=None):
         return self.make_form(super().edit_form, obj)
+
+
+class UserAdminModal(UserAdmin):
+    create_modal = True
+    edit_modal = True
+    details_modal = True
 
 
 class OrganizationAdmin(CustomView):
@@ -268,6 +272,15 @@ admin.add_view(
         menu_icon_type="fas",
         menu_icon_value="fa-users",
         menu_class_name="text-warning",
+    )
+)
+admin.add_view(
+    UserAdmin(
+        User,
+        db.session,
+        category="Menu",
+        endpoint="users_modals",
+        name="Users with Modals",
     )
 )
 admin.add_view(OrganizationAdmin(Organization, db.session, category="Menu"))

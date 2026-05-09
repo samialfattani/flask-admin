@@ -75,13 +75,18 @@ class AdminFilters {
     createFilterInput(inputContainer, filterValue, filter) 
     {
         let field;
-
         if (filter.options || filter.type == "select2-tags") {
+            field = document.createElement('select');            
+            inputContainer.appendChild(field);
+        }else if (filter.options && filter.type != "select2-tags") {          
             field = document.createElement('select');
             inputContainer.appendChild(field);
         }else {
             field = document.createElement('input');
             field.type = 'text';
+        }
+        if (filter.options && filter.type == "select2-tags") {
+          $(field).attr('multiple', 'multiple');
         }
         
         field.className = 'filter-val form-control form-control-sm';
@@ -112,49 +117,24 @@ class AdminFilters {
         }
         
         if (filter.options ) {
-            //field = document.createElement('select');
             field.className = 'filter-val form-select form-select-sm';
             field.name = this.makeName(filter.arg);
             
-            // if(filter.type != "select2-tags") {
-            //     const emptyOption = document.createElement('option');
-            //     emptyOption.value = '';
-            //     emptyOption.textContent = `-- Select --`;
-            //     emptyOption.disabled = true;
-            //     field.appendChild(emptyOption);
-            // }
-            
+            const values = filterValue?.split(',').map(item => item.trim()) || [];
             for (const option of filter.options) {
                 const optionElement = document.createElement('option');
-                optionElement.value = option[0];
-                optionElement.textContent = option[1];
-                if (filterValue && filterValue === option[0]) {
-                    optionElement.selected = true;
+                const val = option[0];
+                const text = option[1];
+                var newOption = new Option(text, val, false, false)
+                $(field).append(newOption).trigger('change');
+                if (filterValue && values.includes(newOption.value)) {
+                  //console.log('selected: ', newOption.value)
+                  newOption.selected = true;
                 }
-                field.appendChild(optionElement);
-                console.log('Added option:', option[0], option[1]);
-            };
+            }
 
             inputContainer.appendChild(field);
         }
-        
-        // if (field.type === 'text' && filter.type == "select2-tags") {
-        //     field = document.createElement('select');
-        //     //field.type = 'hidden';
-        //     field.className = 'filter-val form-control';
-        //     field.name = this.makeName(filter.arg);
-        //     field.value = filterValue || '';
-        //     inputContainer.appendChild(field);
-        // }
-        
-        // if (filter.type == "select2-tags") {
-        //     field = document.createElement('input');
-        //     field.type = 'hidden';
-        //     field.name = this.makeName(filter.arg);
-        //     field.value = filterValue || '';
-        //     inputContainer.appendChild(field);
-        // }
-
         
         // Show the "Apply" button when the filter input changes
         field.addEventListener('input', () => {
@@ -207,11 +187,12 @@ class AdminFilters {
       hiddenField.type = 'hidden';
       hiddenField.name = field.name;
       hiddenField.value = field.value || '';
-      field.name = field.name + '_display';
+      $(field).removeAttr('name'); // to prevent it from being submitted
       field.parentElement.appendChild(hiddenField);
-      //field.classList.add('d-none');
+      
       field.onchange = function() {
-          hiddenField.value = field.value;
+          //console.log($(field).val())
+          hiddenField.value = $(field).val()?.join(',') || '';
       };
     }
 
@@ -401,6 +382,7 @@ document.addEventListener('DOMContentLoaded', function()
                 const filterGroups = JSON.parse(filterGroupsData.textContent);
                 const activeFilters = JSON.parse(activeFiltersData.textContent);
                 new AdminFilters('#filter_form', '.field-filters', filterGroups, activeFilters);
+                //console.log(filterGroups, activeFilters);
             } catch (error) {
                 console.error('Error initializing admin filters:', error);
             }

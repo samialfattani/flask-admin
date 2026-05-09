@@ -137,13 +137,29 @@ def build_sample_db(db, User, Page, Organization, Social):
             else None
         )  # Randomly assign
 
-        # Pick a random organization from the list created above
-        user.organization = random.choice(organizations)
-        user.daily_reminder = (
-            datetime.time(random.randint(0, 23), random.randint(10, 20))
+        # user.social2 = (
+        #     random.choice([s for s in Social])
+        #     if random.choices([True, False], weights=[0.8, 0.2])[0]
+        #     else None
+        # )  # Randomly assign
+
+        user.social3 = (
+            random.choice(list(Social))
             if random.choices([True, False], weights=[0.8, 0.2])[0]
             else None
         )  # Randomly assign
+
+        user.social4 = (
+            random.choice(list(Social))
+            if random.choices([True, False], weights=[0.8, 0.2])[0]
+            else None
+        )  # Randomly assign
+
+        # Pick a random organization from the list created above
+        user.organization = random.choice(organizations)
+        user.daily_reminder = datetime.time(
+            random.randint(0, 23), random.randint(10, 20)
+        )
 
         db.session.add(user)
 

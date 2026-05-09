@@ -2,6 +2,8 @@ import datetime
 import enum
 import os
 
+import sqlalchemy.orm as sqorm
+import sqlalchemy_utils as sau
 from flask import Flask
 from flask import redirect
 from flask import request
@@ -45,7 +47,7 @@ babel = Babel(app, locale_selector=get_locale)
 
 
 class Social(enum.Enum):
-    UNKNOWN = "❌ UNKNOWN"
+    Unknown = "❌ Unknown"
     Single = "🔗 Single"
     Married = "💍 Married"
     Complicated = "❓ Complicated"
@@ -53,7 +55,7 @@ class Social(enum.Enum):
     @classmethod
     def _missing_(cls, value):
         """Hook called when a value is not found in the enumeration."""
-        return cls.UNKNOWN
+        return cls.Unknown
 
     def __str__(self):
         return self.value
@@ -72,6 +74,13 @@ class User(db.Model):
     daily_reminder = db.Column(db.Time)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now)
     social = db.Column(db.Enum(Social), default=Social.Single)
+    # social2 = db.Column(sau.ChoiceType([(s, s) for s in Social]), nullable=True)
+    social3 = db.Column(
+        sau.ChoiceType(Social, impl=db.String()), nullable=True, default="Single"
+    )
+    social4: sqorm.Mapped[Social] = sqorm.mapped_column(
+        db.Enum(Social, name="social4"), nullable=True, default=Social.Single
+    )
 
     organization_id = db.Column(
         db.Integer, db.ForeignKey("organization.id"), nullable=False
@@ -122,9 +131,15 @@ class UserAdmin(CustomView):
         "dob",
         "daily_reminder",
         "social",
+        "social3",
+        "social4",
         "active",
         "created_at",
     )
+
+    column_choices = {
+        "social3": [(s.name, s.value) for s in Social],
+    }
     can_export = True
     export_types = ["csv", "xlsx"]
 
@@ -135,6 +150,7 @@ class UserAdmin(CustomView):
         "dob",
         "daily_reminder",
         "social",
+        "social3",
         "organization",
         "created_at",
     ]

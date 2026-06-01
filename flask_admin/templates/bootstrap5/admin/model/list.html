@@ -131,11 +131,12 @@
                                     </button>
                                   {%- endif -%}
 
+                                  {%- if admin_view.is_sortable(c) -%}
                                     <div class="ms-auto">
                                       <a class="text-decoration-none" href="{{ sort_url(column, sort_column == column) }}"
                                           data-bs-toggle="tooltip" data-bs-placement="top"
                                           title="{{ _gettext('Sort by %(name)s', name=name) | lower }}" >
-                                        {%- if admin_view.is_sortable(c) and sort_column == column -%}
+                                        {%- if sort_column == column -%}
                                           <span class="sort-indicator">
                                               <i class="fas fa-sort-{% if sort_desc %}down{% else %}up{% endif %} text-primary"></i>
                                           </span>
@@ -144,6 +145,7 @@
                                         {%- endif -%}
                                       </a>
                                     </div>
+                                  {%- endif -%}
                                 </div><!-- .d-flex align-items-center -->
                             </th>
                         {% endfor %}

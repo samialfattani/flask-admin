@@ -115,7 +115,7 @@
 
                         {% for c, name in list_columns %}
                             {% set column = loop.index0 %}
-                            <th scope="col" class="column-header col-{{c}} position-relative">
+                            <th scope="col" class="column-header col-{{ c | replace('.', '-') }} position-relative">
                                 <div class="d-flex align-items-top">
                                   {%- if admin_view.is_sortable(c) -%}
                                     <a class="text-decoration-none" href="{{ sort_url(column, sort_column == column) }}">{{ name }}</a>

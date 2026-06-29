@@ -155,6 +155,7 @@ class AdminFilters {
         //debugger;
         if (filter.type) {
             if (filter.type === "datepicker") {
+                filter.type = "text";
                 field.type = 'date';
             } else if (filter.type === "daterangepicker") {
                 this.createDateRange(field, 'date');

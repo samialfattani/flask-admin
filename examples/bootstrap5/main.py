@@ -136,6 +136,14 @@ class UserAdmin(CustomView):
         "active",
         "created_at",
     )
+    column_labels = {
+        "social3": "Social Status",
+    }
+
+    column_descriptions = {
+        "social3": "The social status of the user",
+        "daily_reminder": "Daily Reminder",
+    }
 
     column_choices = {
         "social3": [(s.name, s.value) for s in Social],

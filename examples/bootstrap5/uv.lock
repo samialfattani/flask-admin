@@ -119,7 +119,7 @@ wheels = [
 
 [[package]]
 name = "flask-admin"
-version = "2.0.2"
+version = "2.2.0"
 source = { editable = "../../" }
 dependencies = [
     { name = "flask" },
@@ -189,6 +189,7 @@ provides-extras = ["sqlalchemy", "sqlalchemy-lite", "sqlalchemy-with-utils", "ge
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "azure-storage-blob", specifier = "<12.28.0" },
     { name = "beautifulsoup4" },
     { name = "botocore", specifier = ">=1.35" },
     { name = "flake8" },
@@ -200,19 +201,15 @@ dev = [
     { name = "pre-commit" },
     { name = "pre-commit-uv" },
     { name = "psycopg2-binary" },
-    { name = "pylint" },
-    { name = "pyright" },
     { name = "pytest" },
     { name = "pytest-cov" },
     { name = "sphinx" },
     { name = "sphinx-intl", specifier = ">=2.3.1" },
     { name = "sphinxcontrib-log-cabinet" },
-    { name = "tox", specifier = "<4.30" },
+    { name = "tox" },
     { name = "tox-uv" },
-    { name = "types-beautifulsoup4" },
     { name = "types-boto3" },
     { name = "types-peewee" },
-    { name = "types-pillow" },
     { name = "types-shapely" },
     { name = "types-wtforms" },
 ]
@@ -228,24 +225,30 @@ pre-commit = [
     { name = "pre-commit-uv" },
 ]
 tests = [
+    { name = "azure-storage-blob", specifier = "<12.28.0" },
     { name = "beautifulsoup4" },
     { name = "botocore", specifier = ">=1.35" },
     { name = "flake8" },
     { name = "flask", extras = ["async"] },
     { name = "moto" },
     { name = "psycopg2-binary" },
-    { name = "pylint" },
     { name = "pytest" },
     { name = "pytest-cov" },
 ]
 typing = [
+    { name = "azure-storage-blob", specifier = "<12.28.0" },
+    { name = "beautifulsoup4" },
+    { name = "botocore", specifier = ">=1.35" },
+    { name = "flake8" },
+    { name = "flask", extras = ["async"] },
+    { name = "flask-admin", extras = ["all"], editable = "../../" },
+    { name = "moto" },
     { name = "mypy" },
-    { name = "pyright" },
+    { name = "psycopg2-binary" },
     { name = "pytest" },
-    { name = "types-beautifulsoup4" },
+    { name = "pytest-cov" },
     { name = "types-boto3" },
     { name = "types-peewee" },
-    { name = "types-pillow" },
     { name = "types-shapely" },
     { name = "types-wtforms" },
 ]

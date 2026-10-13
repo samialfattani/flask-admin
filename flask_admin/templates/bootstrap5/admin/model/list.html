@@ -117,19 +117,22 @@
                             {% set column = loop.index0 %}
                             <th scope="col" class="column-header col-{{ c | replace('.', '-') }} position-relative">
                                 <div class="d-flex align-items-top">
-                                  {%- if admin_view.is_sortable(c) -%}
-                                    <a class="text-decoration-none" href="{{ sort_url(column, sort_column == column) }}">{{ name }}</a>
-                                  {%- else -%}
-                                    <span class="fw-semibold">{{ name }}</span>
-                                  {%- endif -%}
 
-                                  {%- if admin_view.column_descriptions.get(c) -%}
-                                    {%- set _desc = admin_view.column_descriptions[c] -%}
-                                    <button type="button" class="btn btn-link btn-sm p-0 ms-1 text-muted"
-                                        data-bs-toggle="tooltip" data-bs-placement="top" title="{{ _desc }}">
-                                        <i class="fas fa-question-circle"></i>
-                                    </button>
-                                  {%- endif -%}
+                                  <div>
+                                    {%- if admin_view.is_sortable(c) -%}
+                                      <a class="text-decoration-none" href="{{ sort_url(column, sort_column == column) }}">{{ name }}</a>
+                                    {%- else -%}
+                                      <span class="fw-semibold">{{ name }}</span>
+                                    {%- endif -%}
+
+                                    {%- if admin_view.column_descriptions.get(c) -%}
+                                      {%- set _desc = admin_view.column_descriptions[c] -%}
+                                      <a class="p-0 m-0 text-decoration-none text-muted"
+                                          data-bs-toggle="tooltip" data-bs-placement="top" title="{{ _desc }}">
+                                          <i class="fas fa-question-circle"></i>
+                                      </a>
+                                    {%- endif -%}
+                                  </div>
 
                                   {%- if admin_view.is_sortable(c) -%}
                                     <div class="ms-auto">
@@ -146,7 +149,7 @@
                                       </a>
                                     </div>
                                   {%- endif -%}
-                                </div><!-- .d-flex align-items-center -->
+                                </div>
                             </th>
                         {% endfor %}
                       {% endblock %}

@@ -231,6 +231,8 @@
     {{ actionslib.script(_gettext('Please select at least one file.'),
                          actions,
                          actions_confirmation) }}
+
+  {{ lib.form_js() }}
   <script src="{{ admin_static.url(filename='admin/js/bootstrap5/modal.js', v='1.0.0') }}"></script>
 
 {% endblock %}

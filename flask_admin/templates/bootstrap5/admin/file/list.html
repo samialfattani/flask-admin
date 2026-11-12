@@ -105,7 +105,6 @@
                 {% if admin_view.can_delete and path %}
                   {% if is_dir %}
                     {% if name != '..' and admin_view.can_delete_dirs %}
-                    {%- set confirmation_msg = _gettext('Are you sure you want to delete "%(name)s" recursively?', name=name) -%}
                     <form class="icon d-inline" method="POST" action="{{ get_url('.delete') }}">
                         {{ delete_form.path(value=path) }}
                         {% if delete_form.csrf_token is defined and delete_form.csrf_token %}
@@ -114,13 +113,13 @@
                           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
                         {% endif %}
                         <button class="btn py-0 text-danger confirm-first"
-                        data-msg="{{ confirmation_msg  }}" >
+                          data-msg="{{ _gettext('Are you sure you want to delete \'%(name)s\' recursively?', name=name) }}"
+                        >
                             <i class="fas fa-times"></i>
                         </button>
                     </form>
                     {% endif %}
                   {% else %}
-                    {%- set confirmation_msg = _gettext('Are you sure you want to delete "%(name)s"?', name=name) -%}
                     <form class="icon d-inline" method="POST" action="{{ get_url('.delete') }}">
                         {{ delete_form.path(value=path) }}
                         {% if delete_form.csrf_token is defined and delete_form.csrf_token %}
@@ -129,7 +128,8 @@
                           <input name="csrf_token" type="hidden" value="{{ csrf_token() }}"/>
                         {% endif %}
                         <button class="btn py-0 text-danger confirm-first"
-                          data-msg="{{ confirmation_msg  }}" >
+                          data-msg="{{ _gettext('Are you sure you want to delete \'%(name)s\'?', name=name) }}"
+                          >
                             <i class="fas fa-trash py-0"></i>
                         </button>
                     </form>
@@ -233,13 +233,4 @@
                          actions_confirmation) }}
   <script src="{{ admin_static.url(filename='admin/js/bootstrap5/modal.js', v='1.0.0') }}"></script>
 
-  <script {{ admin_csp_nonce_attribute }}>
-
-    $('.confirm-first').on('click', function (e)
-    {
-        var message = $(this).data('msg');
-        return faHelpers.safeConfirm(message);
-    });
-
-  </script>
 {% endblock %}

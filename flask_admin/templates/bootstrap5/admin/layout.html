@@ -30,7 +30,7 @@
       {% if children %}
         {% if is_submenu %}
           <li class="dropdown-submenu{{ other_classes }}">
-              <a class="dropdown-item dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="dropdown-item dropdown-toggle a-unlink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   {{ menu_icon(item) }}{{ item.name }}
               </a>
               <ul class="dropdown-menu dropdown-menu dropend" style="max-width: 200px;">
@@ -39,7 +39,7 @@
           </li>
         {% else %}
           <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle {{ active_class }}" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle {{ active_class }} a-unlink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   <i class="{{ class_name }}"></i>
                   {{ menu_icon(item) }}{{ item.name }}
               </a>

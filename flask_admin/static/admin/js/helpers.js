@@ -14,4 +14,17 @@
       e.preventDefault();
     });
 
+    $('.confirm-first').on('click', function (e)
+    {
+        var message = $(this).data('msg');
+        return faHelpers.safeConfirm(message);
+    });
+
+    
+    $('.btn-delete-row').on('click', function (e)
+    {
+        const msg = $(this).data('msg');
+        return faHelpers.safeConfirm(msg);
+    });
+
 })();

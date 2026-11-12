@@ -10,7 +10,7 @@
               {% set action_to_icon = { 'delete': 'fas fa-trash' } %}
               {%- for action_name, action_label in actions -%}
                 <li>
-                    <a class="dropdown-item p-action" href="#"
+                    <a class="dropdown-item p-action a-unlink"
                       data-action="{{ action_name }}" >
                         <i class="{{ action_to_icon.get(action_name, 'fas fa-arrow-right') }}"></i>
                         <span class="ms-2">{{ _gettext(action_label) }}</span>

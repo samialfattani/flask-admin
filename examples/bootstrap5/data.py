@@ -33,7 +33,7 @@ all_themes = [
 ]
 
 
-def build_sample_db(db, User, Page, Organization, Social):
+def build_sample_db(db, User, Page, Organization, Social, Parent, Child):
     """
     Populate a small db with some example entries.
     This version creates multiple organizations and randomly assigns them to users.
@@ -222,6 +222,11 @@ def build_sample_db(db, User, Page, Organization, Social):
         page.title = entry["title"]
         page.content = entry["content"]
         db.session.add(page)
+
+    child1 = Child(name="Child 1", parent=Parent(name="Parent 1"))
+    child2 = Child(name="Child 2", parent=Parent(name="Parent 1"))
+    child3 = Child(name="Child 3", parent=Parent(name="Parent 2"))
+    db.session.add_all([child1, child2, child3])
 
     # Commit all the changes to the database
     db.session.commit()

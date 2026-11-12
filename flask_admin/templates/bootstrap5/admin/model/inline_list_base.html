@@ -31,7 +31,7 @@
                     </div>
                 </span>
               {%- else -%}
-                <a href="#" value="{{ confirmation_message }}" class="inline-remove-field btn btn-danger btn-sm">
+                <a value="{{ confirmation_message }}" class="inline-remove-field btn btn-danger btn-sm a-unlink">
                     <i class="fas fa-trash"></i><span class="ms-1 d-none d-md-inline">{{ _gettext('Delete') }}</span>
                 </a>
               {%- endif -%}
@@ -53,7 +53,7 @@
                     <i class="fas fa-plus"></i><span class="ms-1 d-none d-md-inline">{{ _gettext('New') }}</span>
                     {{ field.label.text }}
                 </h6>
-                <a href="#" value="{{ confirmation_message }}" class="inline-remove-field btn btn-danger btn-sm">
+                <a value="{{ confirmation_message }}" class="inline-remove-field btn btn-danger btn-sm a-unlink">
                     <i class="fas fa-trash"></i>
                 </a>
             </div>
@@ -64,7 +64,7 @@
     </div><!-- .inline-field-template -->
 
     <div class="d-flex justify-content-between align-items-center bg-body-secondary px-3 py-2">
-      <a id="{{ field.id }}-button" href="#" class="btn btn-primary" role="button"
+      <a id="{{ field.id }}-button" class="btn btn-primary a-unlink" role="button"
           data-fieldid="{{ field.id }}">
           <i class="fas fa-plus"></i><span class="ms-1 d-none d-md-inline">{{ _gettext('Add') }}</span>
           {{ field.label.text }}

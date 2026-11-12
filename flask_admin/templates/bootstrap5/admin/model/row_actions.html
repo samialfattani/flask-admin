@@ -48,28 +48,11 @@
       {%- endif -%}
         <span class="d-inline-block" tabindex="0" data-bs-toggle="popover" data-bs-placement="top"
             data-bs-trigger="hover" data-bs-content="{{ _gettext('Delete record') }}">
-            <a class="icon link-danger btn-delete-row" href="#"
-                id="btn-delete-{{ row_id }}"
+            <a class="icon link-danger btn-delete-row a-unlink"
                 data-msg="{{ _message }}">
                 <i class="fas fa-trash"></i>
             </a>
         </span><!-- .d-inline-block -->
     </form>
-
-    <script {{ admin_csp_nonce_attribute }} >
-
-      document.addEventListener('DOMContentLoaded', function ()
-      {
-          $('#btn-delete-{{ row_id }}').on('click', function (e)
-          {
-              const msg = $(this).data('msg');
-
-              if(faHelpers.safeConfirm(msg)) {
-                $("#{{ _id }}").submit();
-              }
-              return false;
-          });
-      });
-    </script>
 
 {% endmacro %}

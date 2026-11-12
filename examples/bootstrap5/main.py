@@ -117,6 +117,28 @@ class Page(db.Model):
         return self.name
 
 
+class Parent(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+
+
+class Fruit(enum.Enum):
+    Apple = 1
+    Banana = 2
+    Orange = 3
+
+
+class Child(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    parent_id = db.Column(db.ForeignKey(Parent.id))
+
+    # to test Select2 with modal
+    fruit = db.Column(db.Enum(Fruit), nullable=True)
+
+    parent = db.relationship(Parent, backref="children")
+
+
 # Customized admin interface
 class CustomView(ModelView):
     pass
@@ -223,6 +245,21 @@ class OrganizationAdmin(CustomView):
     can_view_details = True
 
 
+class ParentView(ModelView):
+    inline_models = [Child]
+    can_view_details = True
+
+
+class ParentWithModal(ModelView):
+    can_view_details = True
+
+    create_modal = True
+    edit_modal = True
+    details_modal = True
+
+    inline_models = [Child]
+
+
 class MyAdminIndexView(AdminIndexView):
     def set_theme(self):
         reqTheme = request.args.get("theme")
@@ -283,7 +320,7 @@ admin.add_view(
     )
 )
 admin.add_view(
-    UserAdmin(
+    UserAdminModal(
         User,
         db.session,
         category="Menu",
@@ -299,6 +336,18 @@ admin.add_view(FileAdmin("files/", name="Local Files", category="Menu"))
 admin.add_view(
     FileAdminModal("files/", name="Local Files with Modals", category="Menu")
 )
+
+admin.add_view(ParentView(Parent, db.session, category="Menu"))
+admin.add_view(
+    ParentWithModal(
+        Parent,
+        db.session,
+        category="Menu",
+        endpoint="parent_with_modal",
+        name="Parent with Modal",
+    )
+)
+
 
 admin.add_link(
     MenuLink(
@@ -361,7 +410,7 @@ if __name__ == "__main__":
     database_path = os.path.join(app_dir, app.config["DATABASE_FILE"])
     if not os.path.exists(database_path):
         with app.app_context():
-            build_sample_db(db, User, Page, Organization, Social)
+            build_sample_db(db, User, Page, Organization, Social, Parent, Child)
 
     # Start app
     app.run(debug=True)
